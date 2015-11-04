@@ -24,16 +24,14 @@ Or
 
 # Information
 
-This repo is mean to be forked by you. It serves as a starting place for people to share their alias' and function's
+This repo is meant to be forked by you into your own private git repo. It serves as a starting place for people to share their alias' and function's
 
-## Installation (specific to bbolt)
+## Installation
 
 > Note, this will overwrite my .bash_profile
 
 git clone git@bitbucket.org:mcneilco/dotfiles.git ~/.dotfiles
 
 cd ~/.dotfiles
-
-git checkout bbolt
 
 cp system/.bash_profile ~/.bash_profile
