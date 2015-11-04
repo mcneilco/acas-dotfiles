@@ -24,7 +24,7 @@ Or
 
 This repo is meant to be forked by you into your own private git repo. It serves as a starting place for people to share their alias' and function's
 
-## Installation
+# Installation
 
 > Note: this will overwrite my .bash_profile, you can also just copy a specific .dotfile's contents to you ~/.bash_profile to pick up the alias'/function's...etc.
 
