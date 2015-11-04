@@ -1,0 +1,3 @@
+# ACAS Variables
+export ACAS_HOME=/Users/bbolt/Documents/mcneilco/acas
+export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/9.3/bin

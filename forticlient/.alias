@@ -1,0 +1,2 @@
+#SPlit DNS issue with forticlient
+alias forti='sudo /bin/sh /Users/bbolt/scutilforti.sh'

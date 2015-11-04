@@ -1,0 +1,7 @@
+dkrlogs(){
+  foldername=$(basename $(pwd))
+  parsed="${foldername//[^A-Za-z0-9 ]/}"
+  container=$parsed'_'$1'_1';
+  echo $container
+  docker logs -f --tail 100 ${container}
+}

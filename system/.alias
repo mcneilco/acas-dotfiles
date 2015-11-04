@@ -1,0 +1,19 @@
+# misc
+alias ll='ls -l'
+alias resetnetwork='sudo ifconfig lo0 down
+sudo ifconfig gif0 down
+sudo ifconfig stf0 down
+sudo ifconfig en0 down
+sudo ifconfig en1 down
+sudo ifconfig p2p0 down
+sudo ifconfig fw0 down
+sudo ifconfig ppp0 down
+sudo route flush
+sudo ifconfig lo0 up
+sudo ifconfig gif0 up
+sudo ifconfig stf0 up
+sudo ifconfig en0 up
+sudo ifconfig en1 up
+sudo ifconfig p2p0 up
+sudo ifconfig fw0 up
+sudo ifconfig ppp0 up'

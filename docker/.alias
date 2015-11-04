@@ -1,0 +1,26 @@
+# Docker
+alias d='docker'
+alias dkr='eval "$(docker-machine env default)"  && export DOCKER_HOST_IP=$(docker-machine ip default) && echo "DOCKER_HOST_IP=$DOCKER_HOST_IP"'
+alias dkrenv='eval $(docker exec -it acas-$AppName env | sed "/^PATH=/d;/^HOSTNAME=/d;/^TERM=/d;/^HOME=/d;s/^/\export /") 2>/dev/null'
+alias dkrstopall='docker stop $(docker ps -a -q)'
+alias dkrrmall='docker rm -v $(docker ps -a -q)'
+alias dkrimagesrmall='docker rmi -f $(docker images -q)'
+alias dkrreload='docker exec -it acas-$AppName bin/acas.sh reload'
+alias dkrtail='docker logs --tail=100 -f acas-$AppName'
+alias dkrbob='curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '"'"'
+{
+  "firstName": "Bob",
+  "lastName": "Roberts",
+  "userName": "bob",
+  "emailAddress": "bob@mcneilco.com",
+  "version": 0,
+  "enabled": true,
+  "locked": false,
+  "password": "5en6G6MezRroT3XKqkdPOmY/BfQ="
+}'"'"' http://$DOCKER_HOST_IP:8080/acas/api/v1/authors'
+
+# Docker-compoose
+alias dc='docker-compose --x-networking'
+
+# Docker-Machine
+alias dm='docker-machine'
