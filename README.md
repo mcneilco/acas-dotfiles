@@ -22,8 +22,6 @@ Or
   docker logs -f --tail 100 ${container}
 }```
 
-# Information
-
 This repo is meant to be forked by you into your own private git repo. It serves as a starting place for people to share their alias' and function's
 
 ## Installation
