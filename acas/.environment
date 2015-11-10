@@ -1,3 +1,4 @@
 # ACAS Variables
-export ACAS_HOME=/Users/bbolt/Documents/mcneilco/acas
+export ACAS_HOME=$HOME/Documents/mcneilco/acas
+export R_LIBS=$ACAS_HOME/r_libs
 export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/9.3/bin
