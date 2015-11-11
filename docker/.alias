@@ -23,7 +23,7 @@ alias dkrbob='curl -i -X POST -H "Content-Type: application/json" -H "Accept: ap
 }'"'"' http://$DOCKER_HOST_IP:8080/acas/api/v1/authors'
 
 # Docker-compoose
-alias dc='docker-compose --x-networking'
+alias dc='docker-compose'
 
 # Docker-Machine
 alias dm='docker-machine'
