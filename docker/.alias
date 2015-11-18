@@ -1,16 +1,31 @@
-# Docker
+# Docker alias
+
+# Shortcut for docker command
 alias d='docker'
-alias dkr='eval "$(docker-machine env default)"  && export DOCKER_HOST_IP=$(docker-machine ip default) && echo "DOCKER_HOST_IP=$DOCKER_HOST_IP"'
-alias dkrenv='eval $(docker exec -it acas-$AppName env | sed "/^PATH=/d;/^HOSTNAME=/d;/^TERM=/d;/^HOME=/d;s/^/\export /") 2>/dev/null'
-alias dkrstopall='docker stop $(docker ps -a -q)'
-alias dkrrmall='docker rm -v $(docker ps -a -q)'
-alias dkrimagesrmall='docker rmi -f $(docker images -q)'
-alias dkrrmdangling='docker rmi $(docker images -q --filter "dangling=true")'
-alias dkrrmvoldangling='docker volume rm $(docker volume ls -q --filter dangling=true)'
-alias dkrclean='dkrstopall || true && dkrrmall || true && dkrrmdangling || true && dkrrmvoldangling || true'
-alias dkrreload='docker exec -it acas-$AppName bin/acas.sh reload'
-alias dkrtail='docker logs --tail=100 -f acas-$AppName'
-alias dkrbob='curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '"'"'
+
+# Exports the necessary environment variables to communicate with docker.  Also prints out the virtual machine host ip
+alias denv='eval "$(docker-machine env default)"  && export DOCKER_HOST_IP=$(docker-machine ip default) && echo "DOCKER_HOST_IP=$DOCKER_HOST_IP"'
+
+# Stop all containers
+alias dstopall='docker stop $(docker ps -a -q)'
+
+# Removes all stopped containers
+alias drmall='docker rm -v $(docker ps -a -q)'
+
+# Force removes all images
+alias dimagesrmall='docker rmi -f $(docker images -q)'
+
+# Removes "dangling" images (untagged images)
+alias drmdangling='docker rmi $(docker images -q --filter "dangling=true")'
+
+# Removes "dangling" volumes (volumes no long attached to containers)
+alias drmvoldangling='docker volume rm $(docker volume ls -q --filter dangling=true)'
+
+# Stops all containers, removes them, removes dangling images, removes dangling volumes
+alias dclean='dstopall || true && drmall || true && drmdangling || true && drmvoldangling || true'
+
+# Creates user bob:secret by posting to tomcat
+alias dbob='curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '"'"'
 {
   "firstName": "Bob",
   "lastName": "Roberts",
@@ -22,8 +37,8 @@ alias dkrbob='curl -i -X POST -H "Content-Type: application/json" -H "Accept: ap
   "password": "5en6G6MezRroT3XKqkdPOmY/BfQ="
 }'"'"' http://$DOCKER_HOST_IP:8080/acas/api/v1/authors'
 
-# Docker-compoose
+# Shortcut for docker-compose
 alias dc='docker-compose'
 
-# Docker-Machine
+# Shortcut for docker-machine
 alias dm='docker-machine'
