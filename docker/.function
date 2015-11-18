@@ -1,4 +1,4 @@
-dkrlogs(){
+dlog(){
   foldername=$(basename $(pwd))
   parsed="${foldername//[^A-Za-z0-9 ]/}"
   container=$parsed'_'$1'_1';
