@@ -1,7 +1,30 @@
-dlog(){
+get_container_from_compose_name() {
   foldername=$(basename $(pwd))
   parsed="${foldername//[^A-Za-z0-9 ]/}"
   container=$parsed'_'$1'_1';
   echo $container
+}
+dlog(){
+  container=$(get_container_from_compose_name $1)
+  echo $container
   docker logs -f --tail 100 ${container}
+}
+droodbmode() {
+  mode=$1
+  container=$(get_container_from_compose_name tomcat)
+  docker exec -it $container sed -i "/<!--/!s/<property name=\"hibernate.hbm2ddl.auto.*/<property name=\"hibernate.hbm2ddl.auto\" value=\"$mode\" \/>/g" /usr/local/tomcat/webapps/acas/WEB-INF/classes/META-INF/persistence.xml
+  echo "updated roo to run in '$1' mode; run 'docker restart $container' to apply"
+}
+dpglogmode(){
+  container=$(get_container_from_compose_name db)
+  docker exec $container sed -i "s/#log_statement = 'none'/log_statement = 'all'/g" /var/lib/postgresql/data/postgresql.conf
+  echo "updated db container to log all sql statments; run 'docker restart $container' to apply"
+}
+drstudio-start(){
+  acasContainer=$(get_container_from_compose_name "acas")
+  docker exec --user root $acasContainer /usr/lib/rstudio-server/bin/rserver
+}
+drstudio-stop(){
+  acasContainer=$(get_container_from_compose_name "acas")
+  docker exec --user root dockercompose_acas_1 killall rserver
 }
