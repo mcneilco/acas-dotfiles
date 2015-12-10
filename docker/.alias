@@ -25,7 +25,7 @@ alias drmvoldangling='docker volume rm $(docker volume ls -q --filter dangling=t
 alias dclean='dstopall || true && drmall || true && drmdangling || true && drmvoldangling || true'
 
 # Shows stats for the current containers
-alias dstats='docker stats $(docker ps|grep -v "NAMES"|awk '{ print $NF }'|tr "\n" " ")'
+alias dstats='docker stats $(docker ps|grep -v "NAMES"|awk '"'"'{ print $NF }'"'"'|tr "\n" " ")'
 
 # Creates user bob:secret by posting to tomcat
 alias dbob='curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '"'"'
