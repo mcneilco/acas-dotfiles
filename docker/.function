@@ -20,6 +20,15 @@ dpglogmode(){
   docker exec $container sed -i "s/#log_statement = 'none'/log_statement = 'all'/g" /var/lib/postgresql/data/postgresql.conf
   echo "updated db container to log all sql statments; run 'docker restart $container' to apply"
 }
+dpgsetting(){
+  container=$(get_container_from_compose_name db)
+  docker exec $container sed -i "s/\(#\)?$1 = .*/$1 = $2/g" /var/lib/postgresql/data/postgresql.conf
+}
+dpglogs(){
+  numberOfLines=$1
+  container=$(get_container_from_compose_name db)
+  docker exec $container bash -c 'tail -100f $(/bin/ls -1t /var/lib/postgresql/data/pg_log/* | /bin/sed q)'
+}
 drstudio-install(){
   acasContainer=$(get_container_from_compose_name "acas")
   install_command="echo 'runner' | passwd --stdin runner && \
