@@ -22,14 +22,12 @@ Or
   docker logs -f --tail 100 ${container}
 }```
 
-This repo is meant to be forked by you into your own private git repo. It serves as a starting place for people to share their alias' and function's
-
 # Installation
 
-> Note: this will overwrite my .bash_profile, you can also just copy a specific .dotfile's contents to you ~/.bash_profile to pick up the alias'/function's...etc.
+> Note: this will source all dotfiles in new terminals, you can also just copy a specific .dotfile's contents to you ~/.bash_profile to pick up the alias'/function's...etc.
 
 ```
 git clone git@bitbucket.org:mcneilco/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-cp system/.bash_profile ~/.bash_profile
+cat system/.bash_profile >> ~/.bash_profile
 ```
