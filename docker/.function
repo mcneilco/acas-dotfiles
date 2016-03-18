@@ -49,3 +49,11 @@ drstudio-stop(){
   acasContainer=$(get_container_from_compose_name "rservices")
   docker exec --user root $acasContainer killall rserver
 }
+dinstallracas(){
+  acasContainer=$(get_container_from_compose_name "rservices")
+  docker exec $acasContainer R CMD INSTALL /home/runner/racas
+}
+dreloadrapache(){
+ acasContainer=$(get_container_from_compose_name "rservices")
+ docker exec $acasContainer sh bin/acas.sh reload
+}
