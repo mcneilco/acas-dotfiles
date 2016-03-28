@@ -40,6 +40,22 @@ alias dbob='curl -i -X POST -H "Content-Type: application/json" -H "Accept: appl
   "password": "5en6G6MezRroT3XKqkdPOmY/BfQ="
 }'"'"' http://$DOCKER_HOST_IP:8080/acas/api/v1/authors'
 
+alias dbob='curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '"'"'
+{
+  "firstName": "Bob",
+  "lastName": "Roberts",
+  "userName": "bob",
+  "emailAddress": "bob@mcneilco.com",
+  "version": 0,
+  "enabled": true,
+  "locked": false,
+  "password": "5en6G6MezRroT3XKqkdPOmY/BfQ=",
+  "recordedBy": "bob",
+  "recordedDate": 1457542406000,
+  "lsType":"default",
+  "lsKind":"default"
+}'"'"' http://$DOCKER_HOST_IP:8080/acas/api/v1/authors'
+
 # Shortcut for docker-compose
 alias dc='docker-compose'
 
