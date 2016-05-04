@@ -11,9 +11,11 @@ dlog(){
   docker logs -f --tail ${2:-$default} ${container}
 }
 dexec(){
+  command=$2
+  default=bash
   container=$(get_container_from_compose_name $1)
   echo $container
-  docker exec -it ${container} bash
+  docker exec -it ${container} ${2:-$default}
 }
 droodbmode() {
   mode=$1

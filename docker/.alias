@@ -28,7 +28,7 @@ alias dclean='dstopall || true && drmall || true && drmdangling || true && drmvo
 alias dstats='docker stats $(docker ps|grep -v "NAMES"|awk '"'"'{ print $NF }'"'"'|tr "\n" " ")'
 
 # Creates user bob:secret by posting to tomcat
-alias dbob='curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '"'"'
+alias dbobold='curl -i -X POST -H "Content-Type: application/json" -H "Accept: application/json" -d '"'"'
 {
   "firstName": "Bob",
   "lastName": "Roberts",
@@ -61,3 +61,6 @@ alias dc='docker-compose'
 
 # Shortcut for docker-machine
 alias dm='docker-machine'
+
+# Short cust to create a docker machine
+alias dmcreate='docker-machine -D create -d virtualbox --virtualbox-disk-size "50000" --virtualbox-memory 8192 default'
