@@ -69,13 +69,23 @@ dreloadrapache(){
  docker exec $acasContainer sh bin/acas.sh reload
 }
 
-ddbbackup(){
+dbackupdb(){
  dbContainer=$(get_container_from_compose_name "db")
- fileName=acas-`date +"%Y-%m-%d-%s"`.sql
- docker exec $dbContainer pg_dump -U postgres acas > $fileName
- echo "$fileName"
+ fileName=$1
+ folder=$2
+ if [ -z $fileName ]
+    then
+      fileName=acas-`date +"%Y-%m-%d-%s"`.sql
+ fi
+ if [ -z $folder ]
+    then
+      folder=.
+ fi
+ output="$folder/$fileName"
+ docker exec $dbContainer pg_dump -U postgres acas > $output
+ echo "$output"
 }
-ddbrestore(){
+drestoredb(){
  dbContainer=$(get_container_from_compose_name "db")
  fileName=$1
  if [ -z $fileName ]
@@ -98,4 +108,73 @@ ddbrestore(){
  echo "restoring $fileName"
  cat $fileName | docker exec -i $dbContainer psql -U postgres acas
  echo "done restoring $fileName, make sure to restart services"
+}
+dbackupacas(){
+ acasContainer=$(get_container_from_compose_name "acas")
+ fileName=$1
+ folder=$2
+ if [ -z $fileName ]
+    then
+      fileName=privateUploads-`date +"%Y-%m-%d-%s"`
+ fi
+ if [ -z $folder ]
+    then
+      folder=.
+ fi
+ output="$folder/$fileName"
+ mkdir -p $output
+ docker cp $acasContainer:/home/runner/build/privateUploads $folder
+ echo $output
+}
+drestoreacas(){
+ acasContainer=$(get_container_from_compose_name "acas")
+ folder=$1
+ if [ -z $folder ]
+    then
+      folder=$(ls -td privateUploads* | head -1)
+      if [ -z "$folder" ]
+        then
+          echo "argument 1 should be a suitable privateUploads folder"
+          return 0
+        else
+          echo "warning: argument 1 was empty but proceeding with most recent folder found $folder"
+      fi
+ fi
+ echo "removing privateUploads/* from acas container"
+ docker exec $acasContainer rm -rf privateUploads/*
+ if [ -n "$(ls -A $folder)" ]
+ then
+  echo "copying $folder/* to acas container"
+  docker cp $folder/* $acasContainer:/home/runner/privateUploads
+ else
+  echo "$folder is empty, nothing to restore"
+ fi
+ echo "done restoring $folder"
+}
+dbackup(){
+ folder=$1
+ if [ -z $folder ]
+    then
+      folder=acas-backup-`date +"%Y-%m-%d-%s"`
+ fi
+ echo $folder
+ mkdir -p $folder
+ dbackupdb acas-database.sql $folder
+ dbackupacas privateUploads $folder
+}
+drestore(){
+ folder=$1
+ if [ -z $folder ]
+   then
+     folder=$(ls -td acas-backup-* | head -1)
+     if [ -z "$folder" ]
+       then
+         echo "argument 1 should be a suitable acas-backup folder"
+         return 0
+       else
+         echo "warning: argument 1 was empty but proceeding with most recent backup folder found $folder"
+     fi
+ fi
+ drestoredb $folder/acas-database.sql
+ drestoreacas $folder/privateUploads
 }
