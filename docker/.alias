@@ -21,6 +21,9 @@ alias drmdangling='docker rmi $(docker images -q --filter "dangling=true")'
 # Removes "dangling" volumes (volumes no long attached to containers)
 alias drmvoldangling='docker volume rm $(docker volume ls -q --filter dangling=true)'
 
+# Removes all networks
+alias drmnetworks='docker network rm $(docker network ls)'
+
 # Stops all containers, removes them, removes dangling images, removes dangling volumes
 alias dclean='dstopall || true && drmall || true && drmdangling || true && drmvoldangling || true'
 

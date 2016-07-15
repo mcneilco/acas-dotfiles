@@ -68,3 +68,34 @@ dreloadrapache(){
  acasContainer=$(get_container_from_compose_name "rservices")
  docker exec $acasContainer sh bin/acas.sh reload
 }
+
+ddbbackup(){
+ dbContainer=$(get_container_from_compose_name "db")
+ fileName=acas-`date +"%Y-%m-%d-%s"`.sql
+ docker exec $dbContainer pg_dump -U postgres acas > $fileName
+ echo "$fileName"
+}
+ddbrestore(){
+ dbContainer=$(get_container_from_compose_name "db")
+ fileName=$1
+ if [ -z $fileName ]
+    then
+      fileName=$(ls -art acas-*.sql | tail -n1)
+      if [ -z "$fileName" ]
+        then
+          echo "argument 1 should be a suitable sql file"
+          exit
+        else
+          echo "warning: argument 1 was empty but proceeding with most recent file found $fileName"
+      fi
+ fi
+ echo "disconnecting sessions on $dbContainer"
+ docker exec -it $dbContainer psql -U postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'acas';"
+ echo "dropping acas database"
+ docker exec -it $dbContainer psql -U postgres -c "drop database acas;"
+ echo "recreating acas database"
+ docker exec -it $dbContainer psql -U postgres -c "create database acas;"
+ echo "restoring $fileName"
+ cat $fileName | docker exec -i $dbContainer psql -U postgres acas
+ echo "done restoring $fileName, make sure to restart services"
+}
