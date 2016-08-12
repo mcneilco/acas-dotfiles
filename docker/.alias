@@ -12,8 +12,11 @@ alias dstopall='docker stop $(docker ps -a -q)'
 # Removes all stopped containers
 alias drmall='docker rm -v $(docker ps -a -q)'
 
-# Force removes all images
+# Force Removes all images
 alias dimagesrmall='docker rmi -f $(docker images -q)'
+
+# Removes all images
+alias drmimages='docker rmi $(docker images -q)'
 
 # Removes "dangling" images (untagged images)
 alias drmdangling='docker rmi $(docker images -q --filter "dangling=true")'
@@ -22,7 +25,10 @@ alias drmdangling='docker rmi $(docker images -q --filter "dangling=true")'
 alias drmvoldangling='docker volume rm $(docker volume ls -q --filter dangling=true)'
 
 # Stops all containers, removes them, removes dangling images, removes dangling volumes
-alias dclean='dstopall || true && drmall || true && drmdangling || true && drmvoldangling || true'
+alias ddestroy='dstopall || true && drmall || true && drmdangling || true && drmvoldangling || true'
+
+# Stops all containers, removes them, removes dangling images, removes dangling volumes
+alias dclean='drmdangling || true && drmvoldangling || true && drmimages || true'
 
 # Shows stats for the current containers
 alias dstats='docker stats $(docker ps|grep -v "NAMES"|awk '"'"'{ print $NF }'"'"'|tr "\n" " ")'
