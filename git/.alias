@@ -1,0 +1,1 @@
+alias gitinfo='name=$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match);git log -1 --pretty=format:"{%n  \"name\": \"$name\",%n  \"commit\": \"%H\",%n  \"date\": \"%ad\",%n  \"message\": \"%f\",%n  \"author_name\": \"%aN\",%n  \"author_email\":\"%aE\"%n}"'

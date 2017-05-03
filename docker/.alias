@@ -31,7 +31,7 @@ alias drmnetworks='docker network rm $(docker network ls)'
 alias ddestroy='dstopall || true && drmall || true && drmdangling || true && drmvoldangling || true'
 
 # Stops all containers, removes them, removes dangling images, removes dangling volumes
-alias dclean='drmdangling || true && drmvoldangling || true && drmimages || true'
+alias dclean='drmdangling || true && drmvoldangling || true'
 
 # Shows stats for the current containers
 alias dstats='docker stats $(docker ps|grep -v "NAMES"|awk '"'"'{ print $NF }'"'"'|tr "\n" " ")'

@@ -1,6 +1,6 @@
 get_container_from_compose_name() {
   foldername=$(basename $(pwd))
-  parsed="${foldername//[^A-Za-z0-9 ]/}"
+  parsed=$(echo "${foldername//[^A-Za-z0-9 ]/}" | tr [:upper:] [:lower:])
   container=$parsed'_'$1'_1';
   echo $container
 }
@@ -54,6 +54,7 @@ drstudio-start(){
   acasContainer=$(get_container_from_compose_name "rservices")
   docker exec --user root $acasContainer /usr/lib/rstudio-server/bin/rserver
   echo "rstudio started;  make sure port 8787 is mapped"
+  sleep 2
   /usr/bin/open -a "/Applications/Google Chrome.app" "http://$DOCKER_HOST_IP:8787"
 }
 drstudio-stop(){
@@ -177,4 +178,29 @@ drestore(){
  fi
  drestoredb $folder/acas-database.sql
  drestoreacas $folder/privateUploads
+}
+dcopybuild(){
+ id=$(docker create acascustom_acas bash)
+ docker cp $id:/home/runner/build ../build
+ docker rm $id
+}
+dcopybuildtar(){
+  acasContainer=$(get_container_from_compose_name "acas")
+  
+}
+dcopyimagebuild() {
+ image=$1
+ if [ -z $image ]
+  then
+    foldername=$(basename $(pwd))
+    parsed=$(echo "${foldername//[^A-Za-z0-9 ]/}" | tr [:upper:] [:lower:])
+    image=$parsed'_acas';
+ fi
+ id=$(docker create $image)
+ docker cp $id:/home/runner/build - > "$image"_build.tar.gz
+ docker rm -v $id
+}
+dcopybuildcontainer(){
+ acasContainer=$(get_container_from_compose_name "acas")
+ docker cp $acasContainer:/home/runner/build ..
 }
