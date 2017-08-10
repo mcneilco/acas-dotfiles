@@ -1,14 +1,16 @@
 get_container_from_compose_name() {
-  foldername=$(basename $(pwd))
-  parsed=$(echo "${foldername//[^A-Za-z0-9 ]/}" | tr [:upper:] [:lower:])
+  if [ ! -f .env ]; then
+    . .env
+  fi
+  folder=$(basename $(pwd))
+  project=${COMPOSE_PROJECT_NAME:-$folder}
+  parsed=$(echo "${project//[^A-Za-z0-9 ]/}" | tr [:upper:] [:lower:])
   container=$parsed'_'$1'_1';
   echo $container
 }
 dlog(){
-  container=$(get_container_from_compose_name $1)
-  echo $container
   default=100
-  docker logs -f --tail ${2:-$default} ${container}
+  docker-compose logs -f --tail ${2:-$default} $1
 }
 dexec(){
   if [ -z $2 ]
