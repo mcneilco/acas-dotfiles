@@ -1,5 +1,5 @@
 get_container_from_compose_name() {
-  if [ ! -f .env ]; then
+  if [ -f .env ]; then
     . .env
   fi
   folder=$(basename $(pwd))
