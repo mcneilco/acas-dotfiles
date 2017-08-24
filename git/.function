@@ -1,0 +1,60 @@
+error() {
+  echo "$@" 1>&2
+}
+gitcheckoutbranch () {
+  git fetch
+  git checkout $1
+}
+gitgetmerged() {
+  towhat=$1
+  output=$(gitcheckoutbranch $towhat)
+  if [ $? -eq 0 ]; then
+    git branch -r --merged | egrep -v "(^\*|release|master|RC|develop)"
+  else
+    error $output
+    return 1
+  fi
+}
+gitdeletemerged() {
+  display_usage() { 
+  	echo "Function requires a branch to check against?" 
+  	echo -e "\nUsage: gitdeletemerged master \n" 
+  	}
+  # if less than 1 arguments supplied, display usage 
+  if [  $# -le 0 ] 
+  then 
+    display_usage
+    return 0
+  fi 
+
+  # check whether user had supplied -h or --help . If yes display usage 
+  if [[ ( $1 == "--help") ||  $1 == "-h" ]] 
+  then 
+    display_usage
+    return 0
+  fi 
+  towhat=$1
+  output=$(gitgetmerged $towhat)
+  if [ $? -eq 0 ]; then
+    echo "$output"
+    echo
+    read -p "The above branches will be deleted on the remote! Are you sure ?  [y/N]: " -n 1 -r
+    echo    # (optional) move to a new line
+    if [[ ! $REPLY =~ ^[Yy]$ ]]
+    then
+        echo "NOT deleting...Whew. 💦"
+    else
+        echo "DELETING..."
+        echo $output | cut -d/ -f2- | xargs -n 1 git push --delete origin
+    fi
+  else
+    if [ -z "$output" ]; 
+    then
+      echo "No branches not merged to $towhat!"
+      return 0
+    else
+      error $output
+      return 1
+    fi
+  fi
+}
