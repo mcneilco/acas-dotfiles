@@ -1,8 +1,0 @@
-acasdeploy() {
-    mvn clean
-    mvn compile war:war
-    cd target
-    mv *.war $1
-    scp $1 $2
-    cd ../
-}
