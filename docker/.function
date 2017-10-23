@@ -10,7 +10,7 @@ get_container_from_compose_name() {
 }
 dlog(){
   default=100
-  docker-compose logs -f --tail ${2:-$default} $1
+  docker-compose logs -f --tail=100 "$@"
 }
 dexec(){
   if [ -z $2 ]
@@ -19,9 +19,7 @@ dexec(){
     else
       command=${@:2}
   fi
-  container=$(get_container_from_compose_name $1)
-  echo $container
-  docker exec -it ${container} ${command}
+  docker-compose exec $1 ${command}
 }
 droodbmode() {
   mode=$1
