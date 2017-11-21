@@ -55,7 +55,7 @@ drstudio-start(){
   docker exec --user root $acasContainer /usr/lib/rstudio-server/bin/rserver
   echo "rstudio started;  make sure port 8787 is mapped"
   sleep 2
-  /usr/bin/open -a "/Applications/Google Chrome.app" "http://$DOCKER_HOST_IP:8787"
+  /usr/bin/open -a "/Applications/Google Chrome.app" "http://localhost:8787"
 }
 drstudio-stop(){
   acasContainer=$(get_container_from_compose_name "rservices")
@@ -219,4 +219,7 @@ dbob() {
  curl -i -X GET -H "Accept: application/json" http://$DOCKER_HOST_IP:3001/api/systemTest/getOrCreateCmpdRegBob
  # syncRoles
  curl -i -X GET -H "Accept: application/json" http://$DOCKER_HOST_IP:3001/api/systemTest/syncRoles
+}
+drlogs() {
+  dexec rservices tail -$1f ../logs/racas.log
 }
