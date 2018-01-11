@@ -223,3 +223,12 @@ dbob() {
 drlogs() {
   dexec rservices tail -$1f ../logs/racas.log
 }
+checkCertificateForRenewal() {
+  pushd /opt/acas > /dev/null
+  iptables -F DOCKER-USER
+  firewall-cmd --zone=public --add-service=http
+  docker-compose run letsencrypt
+  firewall-cmd --zone=public --remove-service=http
+  dexec nginx nginx -s reload
+  popd
+}
