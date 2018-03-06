@@ -224,11 +224,14 @@ drlogs() {
   dexec rservices tail -$1f ../logs/racas.log
 }
 checkCertificateForRenewal() {
-  pushd /opt/acas > /dev/null
-  iptables -F DOCKER-USER
-  firewall-cmd --zone=public --add-service=http
+  pushd /opt/acas/acas_custom > /dev/null
+  iptables -I  DOCKER-USER 1 -p tcp --dport 80 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT && \
+  iptables -I DOCKER-USER 1 -p tcp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  docker-compose stop nginx
+  docker-compose start nginx
   docker-compose run letsencrypt
-  firewall-cmd --zone=public --remove-service=http
+  iptables -D DOCKER-USER -p tcp --dport 80 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT && \
+  iptables -D DOCKER-USER -p tcp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
   dexec nginx nginx -s reload
-  popd
+  popd > /dev/null
 }
