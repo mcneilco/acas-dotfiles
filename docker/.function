@@ -227,11 +227,11 @@ checkCertificateForRenewal() {
   pushd /opt/acas/acas_custom > /dev/null
   iptables -I  DOCKER-USER 1 -p tcp --dport 80 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT && \
   iptables -I DOCKER-USER 1 -p tcp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-  docker-compose stop nginx
-  docker-compose start nginx
-  docker-compose run letsencrypt
+  docker-compose stop nginx 2>&1
+  docker-compose start nginx 2>&1
+  docker-compose run letsencrypt 2>&1
   iptables -D DOCKER-USER -p tcp --dport 80 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT && \
   iptables -D DOCKER-USER -p tcp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-  dexec nginx nginx -s reload
+  dexec -T nginx nginx -s reload
   popd > /dev/null
 }
